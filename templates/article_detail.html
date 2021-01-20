@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ block.super }} - object.title
+{% endblock title %}
+
+{% block content %}
+
+    {% comment %}
+        <div class="article-entry">
+            <h2>{{ object.title }}</h2>
+            <p>by {{ object.author }} | {{ object.date }}</p>
+            <p>{{ object.body }}</p>
+
+            {% if user == object.author %}
+                <p>
+                    <a href="{% url 'article_edit' article.pk %}">Edit</a>
+                    |
+                    <a href="{% url 'article_delete' article.pk %}">Delete</a>
+                </p>
+            {% endif %}
+            
+            <p>Back to <a href="{% url 'article_list' %}">All Articles</a></p>
+
+        </div>
+    {% endcomment %}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <span class="font-weight-bold">{{ article.title }}</span> &middot;
+            <span class="text-muted">by {{ article.author }} | {{ article.date }}</span>
+        </div>
+
+        <div class="card-body">
+            <p>
+                {{ article.body }}
+            </p>
+
+            {% if user == article.author %}
+                <a href="{% url 'article_edit' article.pk %}">Edit</a> | <a href="{% url 'article_delete' article.pk %}">Delete</a>
+            {% endif %}
+        </div>
+
+        <div class="card-footer text-muted">
+            {% for comment in article.comments.all %}
+                <p>
+                    <span class="font-weight-bold">{{ comment.author }} &middot;</span> {{ comment }}
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <a class="btn btn-primary" role="button" href="{% url 'article_comment' article.pk %}">Add Your Comment</a>
+
+    <p class="mt-3">Back to <a href="{% url 'article_list' %}">All Articles</a></p>
+{% endblock content %}
